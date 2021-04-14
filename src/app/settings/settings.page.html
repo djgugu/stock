@@ -1,0 +1,51 @@
+<ion-header *ngIf="performupdate == false">
+  <ion-toolbar>
+    <ion-title>Einstellungen</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="toggleReorderGroup()">Reihenfolge ändern</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="performupdate == false">
+  <!-- The reorder gesture is disabled by default, enable it to drag and drop items -->
+  <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="true">
+    <!-- Default reorder icon, end aligned items -->
+    <ion-item-sliding *ngFor="let f of filialen">
+      <ion-item-options side="end">
+        <ion-item-option (click)="delete_filiale(f)" color="danger" expandable>
+          Löschen
+        </ion-item-option>
+      </ion-item-options>
+      <ion-item>
+        <ion-label>{{f}}</ion-label>
+        <ion-reorder slot="start"></ion-reorder>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-reorder-group>
+  <ion-row>
+  <ion-col col-12>
+    <ion-button expand="block" (click)="insert_filiale_popup()">filiale hinzufügen</ion-button>
+  </ion-col>
+  <ion-col col-12>
+    <ion-button expand="block" (click)="set_pincode()"> {{button_text}}</ion-button>
+  </ion-col>
+  </ion-row>
+  <!-- <ion-row>
+    <ion-col col-12><ion-button color="danger" expand="block" (click)="performManualUpdate('Production')">Updaten</ion-button></ion-col>
+  </ion-row> -->
+</ion-content>
+<ion-content padding *ngIf="performupdate"> 
+  <div class="fullheight xc">
+    <div>
+      <h1>{{downloadText}}</h1>
+      <label for="file">Downloading progress:</label>
+      <progress id="file" value="{{downloadProgress}}" max="100"> 32% </progress>
+    </div>
+  </div>
+</ion-content>

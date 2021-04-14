@@ -1,20 +1,76 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Lagerübersicht
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="pin_code()"> <!-- routerLink="/settings"-->
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+  <ion-searchbar [(ngModel)]="artikelnr" animated="true" cancel-button-text="Abbrechen" inputmode="search" placeholder="Barcode eingeben..." show-cancel-button="focus"></ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="get_artcile()">
+        Suche
+      </ion-button>
+      <!-- <ion-button (click)="scan()">
+        <ion-icon name="barcode-outline"></ion-icon>
+        Scannen
+      </ion-button>  -->
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+
+<ion-content *ngIf="!show_content">
+  <div id="container" *ngIf="show_loading">  
+    <p> <ion-spinner></ion-spinner> </p>
+  </div> 
+</ion-content>
+
+<ion-content [fullscreen]="true" *ngIf="show_content">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Blank</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-row>
+    <ion-col col-12 class="ion-text-center"> 
+      <img [src]="img">
+    </ion-col>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  </ion-row>
+
+ 
+
+  <ion-segment scrollable color="secondary" class="sticky_content" value="begin"> <!--(ionChange)="segmentChanged($event)"-->
+    <ion-segment-button *ngFor="let f of filiale;  let i = index" [value]="(f.filiale == filiale_filter_list[0]) ? 'begin' : ''"  (click)="set_artcile(f.filiale)">
+      <ion-label>{{f.filiale}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  
+
+  <ion-card *ngFor="let a of articles">
+    <ion-card-header>
+      <ion-card-title color="{{(a.colorname == highlighted_colorname) ? 'warning' : 'primary' }} ">{{a.colorname}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let s of a.sizes"> <!--| orderBy: a.sort : true-->
+          <ion-label color="{{(s.name == highlighted_size && a.colorname == highlighted_colorname) ? 'warning' : 'primary' }}">{{s.name}}</ion-label>
+          <ion-note slot="end" color="{{(s.stock <= 2) ? 'danger' : 'success' }} ">{{s.stock}}</ion-note>
+        </ion-item>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+
+
+
+
 </ion-content>
